@@ -1,3 +1,6 @@
+@import "bootstrap";
+
+
 .App {
   text-align: center;
 }
@@ -26,6 +29,39 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.thumbnail {
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    // max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+
+.character-card {
+  h3 {
+    margin-top: 0.5rem;
+  }
+
+}
+
+.grid {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .character-card {
+    float: left;
+    width: 25%;
+  }
 }
 
 @keyframes App-logo-spin {

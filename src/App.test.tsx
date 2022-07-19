@@ -1,9 +1,18 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+const MOCK_PROVIDER = 'MOCK_PROVIDER';
+
+jest.mock('react-query', () => {
+  const MockProvider = () => <button>{MOCK_PROVIDER}</button>
+  return {
+    ...jest.requireActual('react-query'),
+    QueryClientProvider: MockProvider
+  }
+})
+
+test('renders app with react-query provider', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+
+  expect(screen.getByText(MOCK_PROVIDER)).toBeInTheDocument()
 });
