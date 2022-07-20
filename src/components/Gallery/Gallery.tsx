@@ -4,13 +4,13 @@ import { CharacterCard } from '../CharacterCard';
 import { CharacterModal } from '../CharacterModal';
 import { useGetCharacters } from '../../hooks';
 import { DATA_UNAVAILABLE } from '../../i18n';
-import { getMarvelResults } from '../../helpers';
 import { Spinner } from 'reactstrap';
+import { Message } from '../Message';
 
 
 export const Gallery = () => {
-	const { isLoading, isError, data, error } = useGetCharacters();
-	const marvelResults = getMarvelResults<Character[]>(data)
+	const { isSuccess, isLoading, isError, data, error } = useGetCharacters();
+	const marvelResults: Character[] | undefined = data?.data.data.results
 
 	const [characterDetailId, setCharacterDetailId] = useState<number | null>(null);
 
@@ -23,15 +23,23 @@ export const Gallery = () => {
 	}
 
 	if (isLoading) {
-		return <Spinner role="status" />
+		return (
+			<div className='center-content'>
+				<Spinner role="status" />
+			</div>
+		)
 	}
 
 	if (isError) {
-		return <span>{error.message}</span>
+		return (
+			<Message text={error.message} />
+		)
 	}
 
 	if (!marvelResults) {
-		return <span>{DATA_UNAVAILABLE}</span>
+		return (
+			<Message text={DATA_UNAVAILABLE} />
+		)
 	}
 
 	return (
@@ -40,7 +48,7 @@ export const Gallery = () => {
 
 			<ul className='grid'>
 				{
-					marvelResults.map((item: Character) =>
+					isSuccess && marvelResults.map((item: Character) =>
 						<CharacterCard data={item} key={item.id} onClick={() => openModal(item.id)} />)
 				}
 			</ul>

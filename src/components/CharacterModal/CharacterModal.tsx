@@ -4,7 +4,7 @@ import { GET_CHARACTERS_ID } from '../../request';
 import { AxiosResponse } from 'axios';
 import { Character } from '../../models';
 import { useQueryClient } from "react-query";
-import { formatFileUrl, getMarvelResults } from '../../helpers';
+import { formatFileUrl } from '../../helpers';
 import { NO_DESCRIPTION_MESSAGE } from '../../i18n';
 
 export const CLOSE_CHARACTER_MODAL_LABEL = 'Close character modal';
@@ -29,17 +29,13 @@ export const CharacterModal: FC<CharacterModalProps> = (props) => {
 	const queryClient = useQueryClient();
 
 	const data = queryClient.getQueryData<AxiosResponse<any>>([GET_CHARACTERS_ID]);
-	const results = getMarvelResults<Character[]>(data)
+	const marvelResults: Character[] = data?.data.data.results
 
 	useEffect(() => setIsOpen(true), [])
 
-	if (!id || !results) {
-		return null
-	}
-
 	const currentCharacter =
-		results.find((item: Character) =>
-			item.id === props.id)
+		marvelResults.find((item: Character) =>
+			item.id === id)
 
 	if (!currentCharacter) {
 		return null

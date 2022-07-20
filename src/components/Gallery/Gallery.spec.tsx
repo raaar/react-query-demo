@@ -6,6 +6,7 @@ import { Character } from '../../models';
 import { CharacterModalProps } from '../CharacterModal/CharacterModal';
 import { Gallery } from './Gallery';
 
+let mockIsSuccess = false;
 let mockIsError = false;
 let mockIsLoading = false;
 let mockError = {
@@ -16,6 +17,7 @@ let mockResults: Character[] = []
 jest.mock('../../hooks', () => {
 	return {
 		useGetCharacters: () => ({
+			isSuccess: mockIsSuccess,
 			isLoading: mockIsLoading,
 			isError: mockIsError,
 			error: mockError,
@@ -42,6 +44,7 @@ describe('Coverage', () => {
 	beforeEach(() => {
 		mockIsError = false;
 		mockIsLoading = false;
+		mockIsSuccess = false;
 		mockError = {
 			message: ''
 		};
@@ -70,6 +73,7 @@ describe('Coverage', () => {
 	const MOCK_NAME = 'mockTitle';
 
 	it('should display grid with data', () => {
+		mockIsSuccess = true;
 		mockResults = [
 			buildCharacter({ name: `${MOCK_NAME}-1` }),
 			buildCharacter({ name: `${MOCK_NAME}-2` })
@@ -83,6 +87,7 @@ describe('Coverage', () => {
 	});
 
 	it('should open modal with details', () => {
+		mockIsSuccess = true;
 		mockResults = [buildCharacter(), buildCharacter()]
 
 		render(<Gallery />)
@@ -93,6 +98,7 @@ describe('Coverage', () => {
 	});
 
 	it('should close modal onClose', () => {
+		mockIsSuccess = true;
 		mockResults = [buildCharacter(), buildCharacter()]
 
 		render(<Gallery />)

@@ -18,14 +18,14 @@ export const CharacterCard: FC<CharacterCardProps> = ({ data, onClick }) => {
 	const handleOpenModal = () => onClick(data.id);
 
 	return (
-		<div className='character-card'>
-			<button onClick={handleOpenModal} data-testid={THUMBNAIL_BUTTON_TEST_ID}>
+		<li className='character-card'>
+			<button className="btn-no-style" onClick={handleOpenModal} data-testid={THUMBNAIL_BUTTON_TEST_ID}>
 				<Thumbnail src={src} alt={data.name} />
 			</button>
 
-			<button onClick={handleOpenModal} data-testid={TITLE_BUTTON_TEST_ID}>
+			<button className="character-card__title" onClick={handleOpenModal} data-testid={TITLE_BUTTON_TEST_ID}>
 				{data.name}
 			</button>
-		</div>
+		</li>
 	)
 }

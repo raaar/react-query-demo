@@ -1,0 +1,60 @@
+@import "bootstrap";
+
+$card-size: 300px;
+
+.center-content {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.thumbnail {
+  width: $card-size;
+  height: $card-size;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    max-height: 100%;
+  }
+}
+
+
+.character-card {
+  position: relative;
+  width: $card-size;
+  height: $card-size;
+
+  &__title {
+    position: absolute;
+    top: $spacer;
+    left: $spacer;
+    border: 0;
+    font-weight: $font-weight-bold;
+    padding: .5rem;
+    text-align: left;
+    background-color: $black;
+    color: $white;
+  }
+}
+
+.grid {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .character-card {
+    float: left;
+    width: 25%;
+  }
+}
+
+.btn-no-style {
+  padding: 0;
+  border: 0;
+}

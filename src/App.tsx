@@ -1,5 +1,3 @@
-import './App.scss';
-
 import {
   QueryClient,
   QueryClientProvider,
