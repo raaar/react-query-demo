@@ -3,11 +3,10 @@
 $card-size: 300px;
 
 .center-content {
-  position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: $card-size;
   width: 100%;
 }
 
@@ -24,11 +23,11 @@ $card-size: 300px;
   }
 }
 
-
 .character-card {
   position: relative;
   width: $card-size;
   height: $card-size;
+  list-style: none;
 
   &__title {
     position: absolute;
@@ -41,16 +40,29 @@ $card-size: 300px;
     background-color: $black;
     color: $white;
   }
+
+  &__subtitle {
+    display: block;
+    font-style: italic;
+    font-size: $small-font-size;
+    font-weight: $font-weight-light;
+  }
 }
 
 .grid {
   width: 100%;
-  max-width: 1200px;
   margin: 0 auto;
+  overflow: hidden;
+  padding: 0;
 
   .character-card {
     float: left;
-    width: 25%;
+    width: 50%;
+
+
+    @include media-breakpoint-up(lg) {
+      width: 25%;
+    }
   }
 }
 

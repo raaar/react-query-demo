@@ -16,6 +16,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ data, onClick }) => {
 	const src = formatFileUrl(data.thumbnail)
 
 	const handleOpenModal = () => onClick(data.id);
+	const itemDate = new Date(data.modified).toLocaleDateString('en-US');
 
 	return (
 		<li className='character-card'>
@@ -23,9 +24,11 @@ export const CharacterCard: FC<CharacterCardProps> = ({ data, onClick }) => {
 				<Thumbnail src={src} alt={data.name} />
 			</button>
 
-			<button className="character-card__title" onClick={handleOpenModal} data-testid={TITLE_BUTTON_TEST_ID}>
+			<button onClick={handleOpenModal} data-testid={TITLE_BUTTON_TEST_ID} className="character-card__title">
 				{data.name}
+				<div className="character-card__subtitle">{itemDate}</div>
 			</button>
+
 		</li>
 	)
 }

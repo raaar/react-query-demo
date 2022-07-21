@@ -1,57 +1,33 @@
-import { useState } from 'react';
-import { Character } from '../../models';
-import { CharacterCard } from '../CharacterCard';
+import { FC, useState } from 'react';
+import { DATA_UNAVAILABLE } from "../../i18n";
+import { Character } from "../../models";
+import { CharacterCard } from "../CharacterCard";
 import { CharacterModal } from '../CharacterModal';
-import { useGetCharacters } from '../../hooks';
-import { DATA_UNAVAILABLE } from '../../i18n';
-import { Spinner } from 'reactstrap';
-import { Message } from '../Message';
+import { Message } from "../Message";
 
+type GalleryProps = {
+	data: Character[]
+}
 
-export const Gallery = () => {
-	const { isSuccess, isLoading, isError, data, error } = useGetCharacters();
-	const marvelResults: Character[] | undefined = data?.data.data.results
-
+export const Gallery: FC<GalleryProps> = ({ data }) => {
 	const [characterDetailId, setCharacterDetailId] = useState<number | null>(null);
-
-	const openModal = (id: number) => {
-		setCharacterDetailId(id)
-	}
-
-	const closeModal = () => {
-		setCharacterDetailId(null)
-	}
-
-	if (isLoading) {
-		return (
-			<div className='center-content'>
-				<Spinner role="status" />
-			</div>
-		)
-	}
-
-	if (isError) {
-		return (
-			<Message text={error.message} />
-		)
-	}
-
-	if (!marvelResults) {
-		return (
-			<Message text={DATA_UNAVAILABLE} />
-		)
-	}
+	const openModal = (id: number) => setCharacterDetailId(id);
+	const closeModal = () => setCharacterDetailId(null);
 
 	return (
 		<>
-			{!!characterDetailId && <CharacterModal id={characterDetailId} onClose={closeModal} />}
+			{data.length <= 0 && <Message text={DATA_UNAVAILABLE} />}
 
-			<ul className='grid'>
+			< ul className='grid' >
 				{
-					isSuccess && marvelResults.map((item: Character) =>
+					data.map((item: Character) =>
 						<CharacterCard data={item} key={item.id} onClick={() => openModal(item.id)} />)
 				}
 			</ul>
+
+			{!!characterDetailId &&
+				<CharacterModal id={characterDetailId} onClose={closeModal} />
+			}
 		</>
 	)
 }

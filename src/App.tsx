@@ -2,7 +2,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
-import { Gallery } from './components/Gallery';
+import { Layout } from './components/Layout';
 import { ErrorBoundary } from './components/ErrorBoundry';
 
 const queryClient = new QueryClient({
@@ -17,7 +17,7 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <Gallery />
+        <Layout />
       </ QueryClientProvider >
     </ErrorBoundary>
   );

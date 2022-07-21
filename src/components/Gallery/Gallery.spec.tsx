@@ -1,36 +1,36 @@
-import { faker } from '@faker-js/faker';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { buildCharacter } from '../../helpers/testUtils';
+import { DATA_UNAVAILABLE } from '../../i18n';
 import { Character } from '../../models';
 import { CharacterModalProps } from '../CharacterModal/CharacterModal';
-import { Gallery } from './Gallery';
+import { Gallery } from '../Gallery';
 
-let mockIsSuccess = false;
-let mockIsError = false;
-let mockIsLoading = false;
-let mockError = {
-	message: ''
-};
-let mockResults: Character[] = []
+// let mockIsSuccess = false;
+// let mockIsError = false;
+// let mockIsLoading = false;
+// let mockError = {
+// 	message: ''
+// };
+// let mockResults: Character[] = []
 
-jest.mock('../../hooks', () => {
-	return {
-		useGetCharacters: () => ({
-			isSuccess: mockIsSuccess,
-			isLoading: mockIsLoading,
-			isError: mockIsError,
-			error: mockError,
-			data: {
-				data: {
-					data: {
-						results: mockResults
-					}
-				}
-			}
-		})
-	}
-})
+// jest.mock('../../hooks', () => {
+// 	return {
+// 		useGetCharacters: () => ({
+// 			isSuccess: mockIsSuccess,
+// 			isLoading: mockIsLoading,
+// 			isError: mockIsError,
+// 			error: mockError,
+// 			data: {
+// 				data: {
+// 					data: {
+// 						results: mockResults
+// 					}
+// 				}
+// 			}
+// 		})
+// 	}
+// })
 
 const MODAL_MOCK_ID = 'MODAL_MOCK_ID';
 jest.mock('../CharacterModal', () => {
@@ -40,72 +40,32 @@ jest.mock('../CharacterModal', () => {
 	return { CharacterModal: modalMock }
 })
 
-describe('Coverage', () => {
+describe('Gallery', () => {
+	let data: Character[];
 	beforeEach(() => {
-		mockIsError = false;
-		mockIsLoading = false;
-		mockIsSuccess = false;
-		mockError = {
-			message: ''
-		};
-		mockResults = []
+		data = [buildCharacter()];
 	})
 
-	it('should display loading spinner', () => {
-		mockIsLoading = true;
+	it('should display no data message', () => {
+		render(<Gallery data={[]} />)
 
-		render(<Gallery />)
-
-		expect(screen.getByRole('status')).toBeInTheDocument()
-	});
-
-	it('should display error', () => {
-		mockIsError = true;
-		mockError = {
-			message: faker.lorem.words()
-		}
-
-		render(<Gallery />)
-
-		expect(screen.getByText(mockError.message)).toBeInTheDocument();
-	});
-
-	const MOCK_NAME = 'mockTitle';
-
-	it('should display grid with data', () => {
-		mockIsSuccess = true;
-		mockResults = [
-			buildCharacter({ name: `${MOCK_NAME}-1` }),
-			buildCharacter({ name: `${MOCK_NAME}-2` })
-		]
-
-		render(<Gallery />)
-
-		mockResults.forEach(item => {
-			expect(screen.getByText(item.name)).toBeInTheDocument()
-		})
-	});
+		expect(screen.getByText(DATA_UNAVAILABLE)).toBeInTheDocument()
+	})
 
 	it('should open modal with details', () => {
-		mockIsSuccess = true;
-		mockResults = [buildCharacter(), buildCharacter()]
+		render(<Gallery data={data} />)
 
-		render(<Gallery />)
-
-		userEvent.click(screen.getByText(mockResults[0].name))
+		userEvent.click(screen.getByText(data[0].name))
 
 		expect(screen.getByText(MODAL_MOCK_ID)).toBeInTheDocument()
 	});
 
 	it('should close modal onClose', () => {
-		mockIsSuccess = true;
-		mockResults = [buildCharacter(), buildCharacter()]
+		render(<Gallery data={data} />)
 
-		render(<Gallery />)
-
-		userEvent.click(screen.getByText(mockResults[0].name))
+		userEvent.click(screen.getByText(data[0].name))
 		userEvent.click(screen.getByText(MODAL_MOCK_ID))
 
 		expect(screen.queryByText(MODAL_MOCK_ID)).not.toBeInTheDocument()
-	})
+	});
 })

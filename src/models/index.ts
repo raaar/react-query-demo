@@ -73,4 +73,7 @@ export type Character = {
 	}
 }
 
-
+export enum SORT_FILTER {
+	BY_TITLE = 'SORT_BY_TITLE',
+	BY_DATE = 'SORT_BY_DATE'
+}
