@@ -8,5 +8,5 @@ export const GET_CHARACTERS_URL = `${API_URL}/characters?limit=${LIMIT}&apikey=$
 export const GET_CHARACTERS_ID = 'GET_CHARACTERS';
 
 export const getCharacter = () => {
-	return axios.get(GET_CHARACTERS_URL)
+  return axios.get(GET_CHARACTERS_URL)
 }

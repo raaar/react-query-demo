@@ -10,96 +10,96 @@ let mockIsSuccess = false;
 let mockIsError = false;
 let mockIsLoading = false;
 let mockError = {
-	message: ''
+  message: ''
 };
 let mockResults: Character[] = []
 
 jest.mock('../../hooks', () => {
-	return {
-		useGetCharacters: () => ({
-			isSuccess: mockIsSuccess,
-			isLoading: mockIsLoading,
-			isError: mockIsError,
-			error: mockError,
-			data: {
-				data: {
-					data: {
-						results: mockResults
-					}
-				}
-			}
-		})
-	}
+  return {
+    useGetCharacters: () => ({
+      isSuccess: mockIsSuccess,
+      isLoading: mockIsLoading,
+      isError: mockIsError,
+      error: mockError,
+      data: {
+        data: {
+          data: {
+            results: mockResults
+          }
+        }
+      }
+    })
+  }
 });
 
 
 describe("Layout", () => {
-	beforeEach(() => {
-		mockIsError = false;
-		mockIsLoading = false;
-		mockIsSuccess = false;
-		mockError = {
-			message: ''
-		};
-		mockResults = []
-	})
+  beforeEach(() => {
+    mockIsError = false;
+    mockIsLoading = false;
+    mockIsSuccess = false;
+    mockError = {
+      message: ''
+    };
+    mockResults = []
+  })
 
 
-	it('should display loading spinner', () => {
-		mockIsLoading = true;
+  it('should display loading spinner', () => {
+    mockIsLoading = true;
 
-		render(<Layout />)
+    render(<Layout />)
 
-		expect(screen.getByRole('status')).toBeInTheDocument()
-	});
+    expect(screen.getByRole('status')).toBeInTheDocument()
+  });
 
-	it('should display error', () => {
-		mockIsError = true;
-		mockError = {
-			message: faker.lorem.words()
-		}
+  it('should display error', () => {
+    mockIsError = true;
+    mockError = {
+      message: faker.lorem.words()
+    }
 
-		render(<Layout />)
+    render(<Layout />)
 
-		expect(screen.getByText(mockError.message)).toBeInTheDocument();
-	});
+    expect(screen.getByText(mockError.message)).toBeInTheDocument();
+  });
 
-	const MOCK_NAME = 'mockTitle';
+  const MOCK_NAME = 'mockTitle';
 
-	it('should display grid with data', () => {
-		mockIsSuccess = true;
-		mockResults = [
-			buildCharacter({ name: `${MOCK_NAME}-1` }),
-			buildCharacter({ name: `${MOCK_NAME}-2` })
-		]
+  it('should display grid with data', () => {
+    mockIsSuccess = true;
+    mockResults = [
+      buildCharacter({ name: `${MOCK_NAME}-1` }),
+      buildCharacter({ name: `${MOCK_NAME}-2` })
+    ]
 
-		render(<Layout />)
+    render(<Layout />)
 
-		mockResults.forEach(item => {
-			expect(screen.getByText(item.name)).toBeInTheDocument()
-		})
-	});
+    mockResults.forEach(item => {
+      expect(screen.getByText(item.name)).toBeInTheDocument()
+    })
+  });
 
 
-	it('Should filter data by name', async () => {
-		const mockTitle = `${MOCK_NAME}-1`;
+  it('Should filter data by name', async () => {
+    const mockTitle = `${MOCK_NAME}-1`;
 
-		mockIsSuccess = true;
-		mockResults = [
-			buildCharacter({ name: mockTitle }),
-			buildCharacter()
-		]
+    mockIsSuccess = true;
+    mockResults = [
+      buildCharacter({ name: mockTitle }),
+      buildCharacter()
+    ]
 
-		render(<Layout />);
+    render(<Layout />);
 
-		const inputElement = screen.getByPlaceholderText(FILTER_BY_INPUT_PLACEHOLDER)
+    const inputElement = screen.getByPlaceholderText(FILTER_BY_INPUT_PLACEHOLDER)
 
-		userEvent.paste(inputElement, MOCK_NAME)
+    userEvent.paste(inputElement, MOCK_NAME)
 
-		const thumbnailButtons = await screen.findAllByRole('button', {
-			name: FILTER_DATE_LABEL
-		})
+    const thumbnailButtons = await screen.findAllByRole('button', {
+      name: FILTER_DATE_LABEL
+    })
 
-		expect(thumbnailButtons).toHaveLength(1)
-	});
+    expect(thumbnailButtons).toHaveLength(1)
+  });
 });

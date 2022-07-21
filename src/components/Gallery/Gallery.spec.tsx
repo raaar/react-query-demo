@@ -34,38 +34,38 @@ import { Gallery } from '../Gallery';
 
 const MODAL_MOCK_ID = 'MODAL_MOCK_ID';
 jest.mock('../CharacterModal', () => {
-	const modalMock = (props: CharacterModalProps) =>
-		<button onClick={props.onClose}>{MODAL_MOCK_ID}</button>;
+  const modalMock = (props: CharacterModalProps) =>
+    <button onClick={props.onClose}>{MODAL_MOCK_ID}</button>;
 
-	return { CharacterModal: modalMock }
+  return { CharacterModal: modalMock }
 })
 
 describe('Gallery', () => {
-	let data: Character[];
-	beforeEach(() => {
-		data = [buildCharacter()];
-	})
+  let data: Character[];
+  beforeEach(() => {
+    data = [buildCharacter()];
+  })
 
-	it('should display no data message', () => {
-		render(<Gallery data={[]} />)
+  it('should display no data message', () => {
+    render(<Gallery data={[]} />)
 
-		expect(screen.getByText(DATA_UNAVAILABLE)).toBeInTheDocument()
-	})
+    expect(screen.getByText(DATA_UNAVAILABLE)).toBeInTheDocument()
+  })
 
-	it('should open modal with details', () => {
-		render(<Gallery data={data} />)
+  it('should open modal with details', () => {
+    render(<Gallery data={data} />)
 
-		userEvent.click(screen.getByText(data[0].name))
+    userEvent.click(screen.getByText(data[0].name))
 
-		expect(screen.getByText(MODAL_MOCK_ID)).toBeInTheDocument()
-	});
+    expect(screen.getByText(MODAL_MOCK_ID)).toBeInTheDocument()
+  });
 
-	it('should close modal onClose', () => {
-		render(<Gallery data={data} />)
+  it('should close modal onClose', () => {
+    render(<Gallery data={data} />)
 
-		userEvent.click(screen.getByText(data[0].name))
-		userEvent.click(screen.getByText(MODAL_MOCK_ID))
+    userEvent.click(screen.getByText(data[0].name))
+    userEvent.click(screen.getByText(MODAL_MOCK_ID))
 
-		expect(screen.queryByText(MODAL_MOCK_ID)).not.toBeInTheDocument()
-	});
+    expect(screen.queryByText(MODAL_MOCK_ID)).not.toBeInTheDocument()
+  });
 })

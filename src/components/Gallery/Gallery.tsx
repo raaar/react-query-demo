@@ -6,28 +6,28 @@ import { CharacterModal } from '../CharacterModal';
 import { Message } from "../Message";
 
 type GalleryProps = {
-	data: Character[]
+  data: Character[]
 }
 
 export const Gallery: FC<GalleryProps> = ({ data }) => {
-	const [characterDetailId, setCharacterDetailId] = useState<number | null>(null);
-	const openModal = (id: number) => setCharacterDetailId(id);
-	const closeModal = () => setCharacterDetailId(null);
+  const [characterDetailId, setCharacterDetailId] = useState<number | null>(null);
+  const openModal = (id: number) => setCharacterDetailId(id);
+  const closeModal = () => setCharacterDetailId(null);
 
-	return (
-		<>
-			{data.length <= 0 && <Message text={DATA_UNAVAILABLE} />}
+  return (
+    <>
+      {data.length <= 0 && <Message text={DATA_UNAVAILABLE} />}
 
-			< ul className='grid' >
-				{
-					data.map((item: Character) =>
-						<CharacterCard data={item} key={item.id} onClick={() => openModal(item.id)} />)
-				}
-			</ul>
+      < ul className='grid' >
+        {
+          data.map((item: Character) =>
+            <CharacterCard data={item} key={item.id} onClick={() => openModal(item.id)} />)
+        }
+      </ul>
 
-			{!!characterDetailId &&
-				<CharacterModal id={characterDetailId} onClose={closeModal} />
-			}
-		</>
-	)
+      {!!characterDetailId &&
+        <CharacterModal id={characterDetailId} onClose={closeModal} />
+      }
+    </>
+  )
 }

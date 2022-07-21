@@ -9,85 +9,85 @@ import { CharacterModal, CharacterModalProps, CLOSE_CHARACTER_MODAL_LABEL } from
 let mockCachedData: Character[] = []
 
 jest.mock('react-query', () => {
-	return {
-		...jest.requireActual('react-query'),
-		useQueryClient: () => {
-			return {
-				getQueryData: () => ({
-					data: {
-						data: {
-							results: mockCachedData
-						}
-					}
-				})
-			}
-		}
-	}
+  return {
+    ...jest.requireActual('react-query'),
+    useQueryClient: () => {
+      return {
+        getQueryData: () => ({
+          data: {
+            data: {
+              results: mockCachedData
+            }
+          }
+        })
+      }
+    }
+  }
 });
 
 describe('CharacterModal', () => {
-	let props: CharacterModalProps;
+  let props: CharacterModalProps;
 
-	beforeEach(() => {
-		const id = faker.datatype.number()
-		mockCachedData = [buildCharacter({ id })]
-		props = {
-			id,
-			onClose: jest.fn()
-		}
-	})
+  beforeEach(() => {
+    const id = faker.datatype.number()
+    mockCachedData = [buildCharacter({ id })]
+    props = {
+      id,
+      onClose: jest.fn()
+    }
+  })
 
-	it('should not render if id is null', () => {
-		props = {
-			id: null,
-			onClose: jest.fn()
-		}
-		render(<CharacterModal {...props} />)
+  it('should not render if id is null', () => {
+    props = {
+      id: null,
+      onClose: jest.fn()
+    }
+    render(<CharacterModal {...props} />)
 
-		expect(screen.queryByRole('heading', {
-			level: 5,
-		})).not.toBeInTheDocument()
-	})
+    expect(screen.queryByRole('heading', {
+      level: 5,
+    })).not.toBeInTheDocument()
+  })
 
-	it('should render detail modal title', () => {
-		render(<CharacterModal {...props} />)
+  it('should render detail modal title', () => {
+    render(<CharacterModal {...props} />)
 
-		expect(screen.getByRole('heading', {
-			level: 5,
-			name: mockCachedData[0].name
-		})).toBeInTheDocument()
-	})
+    expect(screen.getByRole('heading', {
+      level: 5,
+      name: mockCachedData[0].name
+    })).toBeInTheDocument()
+  })
 
-	it('should call onClose on close button click', async () => {
-		const id = faker.datatype.number()
-		mockCachedData = [buildCharacter({ id })]
-		props = {
-			id,
-			onClose: jest.fn()
-		}
+  it('should call onClose on close button click', async () => {
+    const id = faker.datatype.number()
+    mockCachedData = [buildCharacter({ id })]
+    props = {
+      id,
+      onClose: jest.fn()
+    }
 
-		render(<CharacterModal {...props} />)
+    render(<CharacterModal {...props} />)
 
-		const modalCloseButton = screen.getByLabelText(CLOSE_CHARACTER_MODAL_LABEL)
+    const modalCloseButton = screen.getByLabelText(CLOSE_CHARACTER_MODAL_LABEL)
 
-		userEvent.click(modalCloseButton)
+    userEvent.click(modalCloseButton)
 
-		await waitFor(() => {
-			expect(props.onClose).toHaveBeenCalledTimes(1)
-		});
-	})
+    await waitFor(() => {
+      expect(props.onClose).toHaveBeenCalledTimes(1)
+    });
+  })
 
-	it('should display fallback description', () => {
-		const id = faker.datatype.number()
-		const description = ''
-		mockCachedData = [buildCharacter({ id, description })]
-		props = {
-			id,
-			onClose: jest.fn()
-		}
+  it('should display fallback description', () => {
+    const id = faker.datatype.number()
+    const description = ''
+    mockCachedData = [buildCharacter({ id, description })]
+    props = {
+      id,
+      onClose: jest.fn()
+    }
 
-		render(<CharacterModal {...props} />)
+    render(<CharacterModal {...props} />)
 
-		expect(screen.getByText(NO_DESCRIPTION_MESSAGE)).toBeInTheDocument()
-	})
+    expect(screen.getByText(NO_DESCRIPTION_MESSAGE)).toBeInTheDocument()
+  })
 })

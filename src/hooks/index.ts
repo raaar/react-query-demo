@@ -4,5 +4,5 @@ import { Character, MarvelResponse } from '../models';
 import { useQuery } from 'react-query';
 
 export const useGetCharacters = () =>
-	useQuery<AxiosResponse<MarvelResponse<Character[]>>, AxiosError>
-		([GET_CHARACTERS_ID], getCharacter)
+  useQuery<AxiosResponse<MarvelResponse<Character[]>>, AxiosError>
+    ([GET_CHARACTERS_ID], getCharacter)

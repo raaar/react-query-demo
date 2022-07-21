@@ -7,36 +7,36 @@ import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
 
 describe('Navigation', () => {
-	let props: NavigationProps;
+  let props: NavigationProps;
 
-	beforeEach(() => {
-		props = {
-			sortByValue: SORT_FILTER.BY_TITLE,
-			filterValue: '',
-			onFilterChange: jest.fn(),
-			onSortChange: jest.fn()
-		}
-	});
+  beforeEach(() => {
+    props = {
+      sortByValue: SORT_FILTER.BY_TITLE,
+      filterValue: '',
+      onFilterChange: jest.fn(),
+      onSortChange: jest.fn()
+    }
+  });
 
-	it('Should call onFilterChange on input filter change', () => {
-		const mockText = faker.lorem.word();
+  it('Should call onFilterChange on input filter change', () => {
+    const mockText = faker.lorem.word();
 
-		render(<Navigation {...props} />)
+    render(<Navigation {...props} />)
 
-		const inputElement = screen.getByPlaceholderText(FILTER_BY_INPUT_PLACEHOLDER)
+    const inputElement = screen.getByPlaceholderText(FILTER_BY_INPUT_PLACEHOLDER)
 
-		userEvent.paste(inputElement, mockText)
+    userEvent.paste(inputElement, mockText)
 
-		expect(props.onFilterChange).toHaveBeenCalledWith(mockText)
-	});
+    expect(props.onFilterChange).toHaveBeenCalledWith(mockText)
+  });
 
-	it('Should call onSortChange on sort button click', () => {
-		render(<Navigation {...props} />);
+  it('Should call onSortChange on sort button click', () => {
+    render(<Navigation {...props} />);
 
-		userEvent.click(screen.getByRole('button', {
-			name: FILTER_DATE_LABEL
-		}))
+    userEvent.click(screen.getByRole('button', {
+      name: FILTER_DATE_LABEL
+    }))
 
-		expect(props.onSortChange).toHaveBeenCalledWith(SORT_FILTER.BY_DATE);
-	});
+    expect(props.onSortChange).toHaveBeenCalledWith(SORT_FILTER.BY_DATE);
+  });
 })
