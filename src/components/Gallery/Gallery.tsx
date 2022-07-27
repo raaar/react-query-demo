@@ -10,23 +10,22 @@ type GalleryProps = {
 }
 
 export const Gallery: FC<GalleryProps> = ({ data }) => {
-  const [characterDetailId, setCharacterDetailId] = useState<number | null>(null);
-  const openModal = (id: number) => setCharacterDetailId(id);
-  const closeModal = () => setCharacterDetailId(null);
+  const [characterDetail, setCharacterDetail] = useState<Character | null>(null);
+  const openModal = (character: Character) => setCharacterDetail(character);
+  const closeModal = () => setCharacterDetail(null);
 
   return (
     <>
       {data.length <= 0 && <Message text={DATA_UNAVAILABLE} />}
 
-      < ul className='grid' >
-        {
-          data.map((item: Character) =>
-            <CharacterCard data={item} key={item.id} onClick={() => openModal(item.id)} />)
-        }
+      <ul className='grid'>
+        {data.map(item => (
+          <CharacterCard data={item} key={item.id} onClick={() => openModal(item)} />)
+        )}
       </ul>
 
-      {!!characterDetailId &&
-        <CharacterModal id={characterDetailId} onClose={closeModal} />
+      {!!characterDetail &&
+        <CharacterModal data={characterDetail} onClose={closeModal} />
       }
     </>
   )

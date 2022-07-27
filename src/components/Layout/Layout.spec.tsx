@@ -22,11 +22,15 @@ jest.mock('../../hooks', () => {
       isError: mockIsError,
       error: mockError,
       data: {
-        data: {
-          data: {
-            results: mockResults
+        pages: [
+          {
+            data: {
+              data: {
+                results: mockResults
+              }
+            }
           }
-        }
+        ]
       }
     })
   }
@@ -41,7 +45,15 @@ describe("Layout", () => {
     mockError = {
       message: ''
     };
-    mockResults = []
+    mockResults = [];
+
+    const mockIntersectionObserver = jest.fn();
+    mockIntersectionObserver.mockReturnValue({
+      observe: () => null,
+      unobserve: () => null,
+      disconnect: () => null
+    });
+    window.IntersectionObserver = mockIntersectionObserver;
   })
 
 

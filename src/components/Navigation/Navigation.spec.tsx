@@ -2,7 +2,7 @@
 import { render, screen } from '@testing-library/react';
 import { FILTER_BY_INPUT_PLACEHOLDER, FILTER_DATE_LABEL } from '../../i18n';
 import { SORT_FILTER } from '../../models';
-import { Navigation, NavigationProps } from './Navigation'
+import { Navigation, NavigationProps, SEARCH_DEBOUNCE } from './Navigation'
 import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
 
@@ -18,7 +18,9 @@ describe('Navigation', () => {
     }
   });
 
-  it('Should call onFilterChange on input filter change', () => {
+  jest.useFakeTimers();
+
+  it('Should call onFilterChange on input filter change', async () => {
     const mockText = faker.lorem.word();
 
     render(<Navigation {...props} />)
@@ -26,6 +28,8 @@ describe('Navigation', () => {
     const inputElement = screen.getByPlaceholderText(FILTER_BY_INPUT_PLACEHOLDER)
 
     userEvent.paste(inputElement, mockText)
+
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE);
 
     expect(props.onFilterChange).toHaveBeenCalledWith(mockText)
   });

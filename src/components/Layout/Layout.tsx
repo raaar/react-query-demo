@@ -1,40 +1,60 @@
-import { FC, useState, } from 'react';
-import { Character, SORT_FILTER } from '../../models';
+import { FC, useCallback, useRef, useState, useEffect } from 'react';
+import { Character, GetCharacterPrams, GetCharacterQueryParams, SORT_FILTER } from '../../models';
 import { useGetCharacters } from '../../hooks';
 import { Col, Row, Spinner } from 'reactstrap';
 import { Message } from '../Message';
 import { Navigation } from '../Navigation';
 import { Gallery } from '../Gallery';
 
-export const Layout: FC = () => {
-  const { isSuccess, isLoading, isError, data, error } = useGetCharacters();
-  const marvelResults: Character[] = data?.data.data.results || [];
-  const [filterValue, setFilterByTitle] = useState('');
-  const [sortBy, setSortBy] = useState<SORT_FILTER>(SORT_FILTER.BY_TITLE)
-
-  const filterItemsByTerm = (item: Character) => {
-    if (!filterValue) return true
-
-    return item.name.toLowerCase().includes(filterValue.toLowerCase());
+const MIN_NAME_QUERY_LENGTH = 1;
+const makeQueryParams = ({ orderBy, nameStartsWith }: GetCharacterPrams): GetCharacterQueryParams => {
+  return {
+    orderBy,
+    ...(nameStartsWith.length >= MIN_NAME_QUERY_LENGTH && { nameStartsWith }),
   }
+}
 
-  const sortItemsByValue = (a: Character, b: Character) => {
-    if (sortBy === SORT_FILTER.BY_TITLE) {
-      return a.name > b.name ? 1 : -1
+export const Layout: FC = () => {
+  const [nameStartsWith, setFilterByTitle] = useState('');
+  const [orderBy, setOrderBy] = useState<SORT_FILTER>(SORT_FILTER.BY_TITLE);
+  const queryParams = makeQueryParams({ orderBy, nameStartsWith })
+  const endOfLayout = useRef<HTMLDivElement>(null)
+
+  const {
+    isSuccess,
+    isLoading,
+    isError,
+    data, error,
+    hasNextPage,
+    isFetching,
+    fetchNextPage
+  } =
+    useGetCharacters(queryParams);
+
+  const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
+    const [target] = entries
+    if (target.isIntersecting) {
+      fetchNextPage()
+    }
+  }, [fetchNextPage]);
+
+  useEffect(() => {
+    const element = endOfLayout.current
+    const option = { threshold: 0 }
+
+    if (!element) {
+      return;
     }
 
-    return a.modified > b.modified ? 1 : -1
-  }
+    const observer = new IntersectionObserver(handleObserver, option);
+    observer.observe(element)
+    return () => observer.unobserve(element)
+  }, [fetchNextPage, hasNextPage, handleObserver])
 
-  const filteredResults = marvelResults?.filter(filterItemsByTerm).sort(sortItemsByValue)
 
-  if (isLoading) {
-    return (
-      <div className='center-content'>
-        <Spinner role="status" />
-      </div>
-    )
-  }
+  const pages = data?.pages || []
+  const galleryData = pages.reduce<Character[]>((a, b) =>
+    a.concat(b.data.data.results), []);
 
   if (isError) {
     return (
@@ -47,13 +67,17 @@ export const Layout: FC = () => {
       <Row>
         <Col>
           <Navigation
-            filterValue={filterValue}
-            sortByValue={sortBy}
+            filterValue={nameStartsWith}
+            sortByValue={orderBy}
             onFilterChange={setFilterByTitle}
-            onSortChange={setSortBy}
+            onSortChange={setOrderBy}
           />
 
-          {isSuccess && <Gallery data={filteredResults} />}
+          {isSuccess && <Gallery data={galleryData} />}
+
+          <div className='center-content' ref={endOfLayout}>
+            {(isLoading || isFetching) && <Spinner role="status" />}
+          </div>
         </Col>
       </Row>
     </div>

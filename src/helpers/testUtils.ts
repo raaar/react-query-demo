@@ -63,4 +63,4 @@ export const buildCharacter = (overrides: Partial<Character> = {}): Character =>
     ]
   },
   ...overrides
-})
+});

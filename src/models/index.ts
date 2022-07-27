@@ -1,3 +1,14 @@
+export type GetCharacterPrams = {
+  orderBy: SORT_FILTER,
+  nameStartsWith: string,
+}
+
+export type GetCharacterQueryParams = {
+  orderBy: SORT_FILTER;
+  offset?: number;
+  nameStartsWith?: string;
+}
+
 export type MarvelResponse<ResponseData> = {
   data: {
     count: number,
@@ -74,6 +85,6 @@ export type Character = {
 }
 
 export enum SORT_FILTER {
-  BY_TITLE = 'SORT_BY_TITLE',
-  BY_DATE = 'SORT_BY_DATE'
+  BY_TITLE = 'name',
+  BY_DATE = 'modified'
 }

@@ -6,33 +6,8 @@ import { Character } from '../../models';
 import { CharacterModalProps } from '../CharacterModal/CharacterModal';
 import { Gallery } from '../Gallery';
 
-// let mockIsSuccess = false;
-// let mockIsError = false;
-// let mockIsLoading = false;
-// let mockError = {
-// 	message: ''
-// };
-// let mockResults: Character[] = []
-
-// jest.mock('../../hooks', () => {
-// 	return {
-// 		useGetCharacters: () => ({
-// 			isSuccess: mockIsSuccess,
-// 			isLoading: mockIsLoading,
-// 			isError: mockIsError,
-// 			error: mockError,
-// 			data: {
-// 				data: {
-// 					data: {
-// 						results: mockResults
-// 					}
-// 				}
-// 			}
-// 		})
-// 	}
-// })
-
 const MODAL_MOCK_ID = 'MODAL_MOCK_ID';
+
 jest.mock('../CharacterModal', () => {
   const modalMock = (props: CharacterModalProps) =>
     <button onClick={props.onClose}>{MODAL_MOCK_ID}</button>;
